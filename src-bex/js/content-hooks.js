@@ -5,4 +5,19 @@ export default function attachContentHooks (bridge) {
   bridge.on('quasar.detect', event => {
     console.log('Quasar Detected!', event.data)
   })
+
+  bridge.on('add.bookmark', event => {
+    bridge.send('add.bookmark.bg', event.data).then(payload => {
+      bridge.send(event.eventResponseKey, payload.data)
+    })
+  })
+
+  bridge.on('remove.bookmark', event => {
+    console.log('Removing CS: ', event.data)
+    bridge.send('remove.bookmark.bg', event.data)
+  })
+
+  bridge.on('dom.bookmarks.bg', event => {
+    bridge.send('dom.bookmarks', { ...event.data })
+  })
 }

@@ -1,1 +1,13 @@
 /* Global CSS used within your BEX. This is not preprocessed so this has to be pure CSS. */
+
+.doc-h2, .doc-h3 {
+  position: relative;
+}
+
+.quin-injected-icon {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}

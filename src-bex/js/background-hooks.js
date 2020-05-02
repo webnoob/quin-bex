@@ -2,8 +2,11 @@
 // Note: Events sent from this background script using `bridge.send` can be `listen`'d for by all client BEX bridges for this BEX
 
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/background-hooks
-
+import { v4 as uuidv4 } from 'uuid'
+let Bridge
 export default function attachBackgroundHooks (bridge /* , allActiveConnections */) {
+  Bridge = bridge
+  console.log('EXPORTING BRIDGE!!')
   bridge.on('storage.get', event => {
     const payload = event.data
     if (payload.key === null) {
@@ -60,4 +63,51 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
       })
     }
   })
+
+  bridge.on('add.bookmark.bg', event => {
+    console.log(event.data)
+    const key = 'bookmark.' + uuidv4()
+    const model = {
+      type: 'bookmark',
+      url: event.data.url
+    }
+    chrome.storage.local.set({
+      [key]: model
+    }, () => {
+      // nothing
+    })
+
+    bridge.send(event.eventResponseKey, {
+      ...model,
+      key
+    })
+  })
+
+  bridge.on('remove.bookmark.bg', event => {
+    console.log('REMOVING: ', event.data)
+    chrome.storage.local.remove(event.data.key)
+  })
 }
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (tab.url.toLowerCase().indexOf('quasar.dev') > -1 && changeInfo.status === 'complete') {
+    console.log('URL updated: ', tabId, tab.url, changeInfo)
+    chrome.storage.local.get(null, r => {
+      const result = []
+
+      // Group the items up into an array to take advantage of the bridge's chunk splitting.
+      for (const itemKey in r) {
+        result.push({
+          key: itemKey,
+          ...r[itemKey]
+        })
+      }
+
+      const bookmarks = result.filter(f => f.type === 'bookmark')
+      console.log('SENDING', bookmarks)
+      Bridge.send('dom.bookmarks.bg', {
+        bookmarks
+      })
+    })
+  }
+})

@@ -41,7 +41,6 @@ export default function detectQuasar (bridge) {
 
       if (el) {
         let Vue = Object.getPrototypeOf(el.__vue__).constructor
-        console.log(Vue)
         while (Vue.super) {
           Vue = Vue.super
         }

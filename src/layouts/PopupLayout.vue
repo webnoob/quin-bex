@@ -150,7 +150,17 @@
     <q-page-container class="popup_container">
       <q-tab-panels v-model="selectedTab">
         <q-tab-panel name="notifications"><notifications /></q-tab-panel>
-        <q-tab-panel name="bookmarks">Bookmarks</q-tab-panel>
+        <q-tab-panel name="bookmarks">
+          <q-list
+            v-for="bookmark in bookmarks"
+            :key="bookmark.url"
+            dense
+          >
+            <q-item @click="redirectToBookmark(bookmark)" clickable dense>
+              > {{bookmark.url.replace('https://quasar.dev/', '')}}
+            </q-item>
+          </q-list>
+        </q-tab-panel>
       </q-tab-panels>
     </q-page-container>
   </q-layout>

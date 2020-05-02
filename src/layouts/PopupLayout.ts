@@ -3,6 +3,7 @@ import NotificationsComponent from 'components/Notifications'
 import SearchSettingsComponent from 'components/settings/SearchSettings'
 import BookmarkSettingsComponent from 'components/settings/BookmarkSettings'
 import { LOAD_SETTINGS } from '../store/settings/types'
+import dbService from '../services/dbService'
 
 @Component({
   preFetch ({ store }) {
@@ -20,6 +21,7 @@ export default class PopoutLayout extends Vue {
   public selectedTab = 'notifications'
   public search = ''
   public settingsSelection = ''
+  public bookmarks = []
 
   public get settingsComponent () {
     switch (this.settingsSelection) {
@@ -29,7 +31,22 @@ export default class PopoutLayout extends Vue {
     }
   }
 
+  public loadBookmarks () {
+    dbService.getAll('bookmark').then(bookmarks => {
+      this.bookmarks = bookmarks
+    })
+  }
+
+  public redirectToBookmark (bookmark: any) {
+    this.$q.bex.send('redirect.user', {
+      url: bookmark.url,
+      openInNewTab: this.$store.getters.settings.openBookmarksInNewTab
+    })
+  }
+
   public mounted () {
+    this.loadBookmarks()
+
     import('docsearch.js').then((docSearch: any) => {
       docSearch.default({
         apiKey: '5c15f3938ef24ae49e3a0e69dc4a140f',
