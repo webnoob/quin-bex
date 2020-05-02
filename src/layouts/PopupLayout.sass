@@ -1,0 +1,35 @@
+@import '../css/doc-search'
+
+.q-toolbar
+  height: 38px
+  min-height: 38px
+
+.q-tab
+  font-size: 14px
+
+.q-input.search
+  .q-field
+    &__inner,
+    &__control,
+    &__control-container,
+    &__append
+      height: 30px
+      min-height: 30px
+
+      input
+        padding-left: $flex-gutter-sm
+
+      .q-btn
+        font-size: 12px
+
+    &__append
+      padding-left: unset
+
+      .q-btn
+        padding: 0 8px
+
+  .q-field__append,
+  .q-field__marginal
+    background: $secondary
+    color: white
+

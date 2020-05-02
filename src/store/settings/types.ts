@@ -1,0 +1,3 @@
+export const LOAD_SETTINGS = 'LOAD_SETTINGS'
+export const SET_BOOL_SETTING = 'SET_BOOL_SETTING'
+export const SET_STATE = 'SET_STATE'

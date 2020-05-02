@@ -1,0 +1,14 @@
+<template>
+  <div class="row items-center justify-around">
+    <q-scroll-area
+      class="flex flex-center"
+      style="height: 400px; width: 100%;"
+    >
+    <h5 class="text-center">No New Notifications</h5>
+    </q-scroll-area>
+  </div>
+</template>
+
+<script lang="ts" src="./Notifications.ts" />
+
+<style lang="sass" src="./Notifications.sass" />
