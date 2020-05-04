@@ -20,15 +20,20 @@ export default function attachDomHooks (bridge) {
 
       // Can't do the item check like this because not all Quasars heading ids are valid ids ie:
       // #Submitting-to-a-URL-(native-form-submit)
-      // Instead we have to assume the heading structure won't change and use childNodes
+      // Instead we use a yucky loop to find the node that matches ours...
+      // I assume there is a better way but I'm too stupid to see it :)
       // let item = document.querySelector('#' + el.id + ' i.quin-injected-icon')
       let item
-      if (el.childNodes.length === 1) {
+      for (const node of el.childNodes) {
+        if (node.toString().includes('<i class="quin-injected-icon')) {
+          item = node
+        }
+      }
+
+      if (item === void 0) {
         item = document.createElement('i')
         item.className = 'quin-injected-icon material-icons'
         el.append(item)
-      } else {
-        item = el.childNodes[1]
       }
 
       let createRemoveBookmarkHandler = void 0

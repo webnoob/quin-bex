@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid'
 let Bridge
 export default function attachBackgroundHooks (bridge /* , allActiveConnections */) {
   Bridge = bridge
-  console.log('EXPORTING BRIDGE!!')
   bridge.on('storage.get', event => {
     const payload = event.data
     if (payload.key === null) {
@@ -66,7 +65,6 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
   })
 
   bridge.on('add.bookmark.bg', event => {
-    console.log(event.data)
     const key = 'bookmark.' + uuidv4()
     const model = {
       type: 'bookmark',

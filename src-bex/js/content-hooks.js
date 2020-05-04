@@ -3,7 +3,7 @@
 
 export default function attachContentHooks (bridge) {
   bridge.on('quasar.detect', event => {
-    console.log('Quasar Detected!', event.data)
+    // console.log('Quasar Detected!', event.data)
   })
 
   bridge.on('add.bookmark', event => {
@@ -13,7 +13,6 @@ export default function attachContentHooks (bridge) {
   })
 
   bridge.on('remove.bookmark', event => {
-    console.log('Removing CS: ', event.data)
     bridge.send('remove.bookmark.bg', event.data)
   })
 
