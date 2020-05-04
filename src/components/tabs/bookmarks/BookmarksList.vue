@@ -1,17 +1,15 @@
 <template>
-  <div>
-    LIST!!!
-    <q-list
-      class="bookmarks"
-      v-for="bookmark in bookmarks"
-      :key="bookmark.url"
+  <q-list>
+    <q-expansion-item
+      v-for="bookmark in groupedBookmarks"
+      :key="bookmark.label"
+      :label="bookmark.label"
+      expand-separator
       dense
     >
-      <q-item @click="redirectToBookmark(bookmark)" clickable dense>
-        {{bookmark.label}}
-      </q-item>
-    </q-list>
-  </div>
+      <bookmarks-list-item :bookmarks="bookmark.children" />
+    </q-expansion-item>
+  </q-list>
 </template>
 
 <script lang="ts" src="./BookmarksList.ts" />

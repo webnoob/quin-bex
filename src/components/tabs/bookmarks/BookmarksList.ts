@@ -1,10 +1,14 @@
 import { Component } from 'vue-property-decorator'
 import BookmarksMixin from './mixins/bookmarksMixin'
+import BookmarksListItem from './BookmarksListItem'
 
-@Component
+@Component({
+  components: {
+    bookmarksListItem: BookmarksListItem
+  }
+})
 export default class BookmarksList extends BookmarksMixin {
   public created () {
-    console.log('list')
     this.group = true
   }
 }

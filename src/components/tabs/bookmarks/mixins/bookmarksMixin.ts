@@ -1,14 +1,14 @@
 import { Component, Vue } from 'vue-property-decorator'
 import dbService from '../../../../services/dbService'
 
-interface GroupedBookmark {
+export interface GroupedBookmark {
   label: string;
   level: number;
   url: string;
   children: GroupedBookmark[];
 }
 
-interface Bookmark {
+export interface Bookmark {
   url: string;
   label?: string;
 }
