@@ -2,7 +2,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import Notifications from 'components/tabs/Notifications'
 import SearchSettings from 'components/settings/SearchSettings'
 import BookmarkSettings from 'components/settings/BookmarkSettings'
-import { LOAD_SETTINGS } from '../store/settings/types'
+import { LOAD_SETTINGS, SET_STRING_SETTING } from '../store/settings/types'
 import QuasarLinks from 'components/QuasarLinks'
 import SettingsIndex from 'components/settings'
 import DrawerLayout from 'components/DrawerLayout'
@@ -26,9 +26,12 @@ export default class PopoutLayout extends Vue {
   public leftDrawerState = false
   public rightDrawerState = false
   public settingDrawerState = false
-  public selectedTab = 'notifications'
   public search = ''
   public settingsSelection = ''
+
+  public get selectedTab () {
+    return this.$store.getters.settings.lastTab
+  }
 
   public get settingsComponent () {
     switch (this.settingsSelection) {
@@ -39,6 +42,13 @@ export default class PopoutLayout extends Vue {
       case 'bookmarks':
         return 'bookmark-settings'
     }
+  }
+
+  public tabChanged (tab: string) {
+    this.$store.dispatch(SET_STRING_SETTING, {
+      field: 'lastTab',
+      value: tab
+    })
   }
 
   public openSettings (selection: string) {

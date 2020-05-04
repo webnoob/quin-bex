@@ -19,7 +19,8 @@
     "uuid": "^8.0.0",
     "vue-class-component": "^7.2.2",
     "vue-i18n": "^8.0.0",
-    "vue-property-decorator": "^8.4.2"
+    "vue-property-decorator": "^8.4.2",
+    "vuex-class": "^0.3.2"
   },
   "devDependencies": {
     "@quasar/app": "^1.6.2",

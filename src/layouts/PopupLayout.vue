@@ -52,7 +52,7 @@
       </q-toolbar>
 
       <q-toolbar class="tabs">
-        <q-tabs class="full-width" v-model="selectedTab" dense>
+        <q-tabs class="full-width" :value="selectedTab" @input="tabChanged" dense>
           <q-tab name="notifications" no-caps>Notifications</q-tab>
           <q-tab name="bookmarks" no-caps>QBookmarks</q-tab>
         </q-tabs>
