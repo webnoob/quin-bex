@@ -1,7 +1,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
-export default class SettingsIndexComponent extends Vue {
+export default class SettingsIndex extends Vue {
   @Prop({ type: String }) public readonly value!: string
 
   public openSetting (settingName: string) {

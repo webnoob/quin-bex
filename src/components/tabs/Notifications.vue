@@ -4,7 +4,7 @@
       class="flex flex-center"
       style="height: 400px; width: 100%;"
     >
-    <h5 class="text-center">No New Notifications</h5>
+      <h5 class="text-center">Latest Quasar News Coming Soon!</h5>
     </q-scroll-area>
   </div>
 </template>

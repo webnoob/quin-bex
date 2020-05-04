@@ -2,7 +2,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { SET_BOOL_SETTING } from '../../store/settings/types'
 
 @Component
-export default class SearchSettingsComponent extends Vue {
+export default class SearchSettings extends Vue {
   public get searchInNewTab () {
     return this.$store.getters.settings.searchInNewTab
   }

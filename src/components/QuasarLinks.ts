@@ -3,7 +3,7 @@ import { fabFacebook, fabGithub, fabTwitter } from '@quasar/extras/fontawesome-v
 import { mdiBlogger, mdiBullhorn, mdiCharity, mdiChat, mdiForum } from '@quasar/extras/mdi-v4'
 
 @Component
-export default class QuasarLinksComponent extends Vue {
+export default class QuasarLinks extends Vue {
   public mdiChat = mdiChat
   public mdiForum = mdiForum
   public fabGithub = fabGithub

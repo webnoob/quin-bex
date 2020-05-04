@@ -1,5 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class NotificationsComponent extends Vue {
+export default class Notifications extends Vue {
 }
