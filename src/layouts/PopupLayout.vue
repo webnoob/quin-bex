@@ -96,8 +96,8 @@
 
     <q-page-container class="popup_container">
       <q-tab-panels v-model="selectedTab">
-        <q-tab-panel name="notifications"><notifications /></q-tab-panel>
-        <q-tab-panel name="bookmarks"><bookmarks /></q-tab-panel>
+        <q-tab-panel name="notifications" class="q-pa-none"><notifications /></q-tab-panel>
+        <q-tab-panel name="bookmarks" class="q-pa-none"><component :is="bookmarksComponent" :key="bookmarksComponent" /></q-tab-panel>
       </q-tab-panels>
     </q-page-container>
   </q-layout>

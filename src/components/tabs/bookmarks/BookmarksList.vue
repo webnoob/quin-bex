@@ -1,5 +1,6 @@
 <template>
   <div>
+    LIST!!!
     <q-list
       class="bookmarks"
       v-for="bookmark in bookmarks"
@@ -7,12 +8,12 @@
       dense
     >
       <q-item @click="redirectToBookmark(bookmark)" clickable dense>
-        > {{bookmark.url.replace('https://quasar.dev/', '')}}
+        {{bookmark.label}}
       </q-item>
     </q-list>
   </div>
 </template>
 
-<script lang="ts" src="./Bookmarks.ts" />
+<script lang="ts" src="./BookmarksList.ts" />
 
-<style lang="sass" src="./Bookmarks.sass" />
+<style lang="sass" src="./BookmarksList.sass" />

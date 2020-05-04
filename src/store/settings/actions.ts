@@ -14,7 +14,8 @@ const actions: ActionTree<SettingsStateInterface, StoreInterface> = {
     return dispatch(SAVE_SETTINGS)
   },
   [LOAD_SETTINGS] ({ commit }) {
-    dbService.get('settings').then((model: SettingsStateInterface) => {
+    return dbService.get('settings').then((model: SettingsStateInterface) => {
+      console.log(model)
       commit(SET_STATE, model)
     })
   },

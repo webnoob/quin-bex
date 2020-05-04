@@ -9,8 +9,10 @@
     <q-item class="setting bg-white row items-center">
       <q-item-section>
         <q-item-label>
-          New tab for each search result?
-          <q-toggle v-model="searchInNewTab" />
+          <div class="row justify-between items-center">
+            New tab for each search result?
+            <q-toggle v-model="searchInNewTab" />
+          </div>
         </q-item-label>
         <q-item-label caption>If not set, QUiN will look for an existing quasar.dev tab to load search results.</q-item-label>
       </q-item-section>
