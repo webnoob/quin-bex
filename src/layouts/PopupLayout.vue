@@ -22,7 +22,7 @@
         <q-btn
           icon="bookmark"
           aria-label="Menu"
-          @click="leftDrawerState = !leftDrawerState"
+          @click="rightDrawerState = !rightDrawerState"
           class="font-size-12"
           dense
           flat
@@ -67,53 +67,20 @@
       bordered
       no-swipe-close
     >
-      <q-layout view="lHh Lpr lFf">
-        <q-header>
-          <q-toolbar
-            bg-color="primary"
-          >
-            <q-btn
-              icon="close"
-              aria-label="Menu"
-              @click="leftDrawerState = !leftDrawerState"
-              class="font-size-12"
-              flat
-              dense
-              round
-            />
-            <q-space />
-            <q-toolbar-title class="font-size-12">QUiN v0.0.1-alpha.1</q-toolbar-title>
-          </q-toolbar>
-        </q-header>
+      <drawer-layout v-model="leftDrawerState">
+        <settings v-model="settingsSelection" @input="settingDrawerState = !settingDrawerState" />
+      </drawer-layout>
+    </q-drawer>
 
-        <q-page-container class="bg-grey-4 flex flex-center">
-          <q-list class="full-width bg-grey-4">
-            <q-item>
-              <q-item-label class="row justify-center items-center">
-                QUiN Settings
-              </q-item-label>
-            </q-item>
-
-            <q-item class="setting bg-white row items-center" clickable @click="openSettings('search')">
-              Search
-              <q-space />
-              <q-icon name="keyboard_arrow_right"></q-icon>
-            </q-item>
-
-            <q-item class="setting bg-white row items-center q-mb-xs" clickable @click="openSettings('notifications')">
-              Notifications
-              <q-space />
-              <q-icon name="keyboard_arrow_right"></q-icon>
-            </q-item>
-
-            <q-item class="setting bg-white row items-center q-mb-xs" clickable @click="openSettings('bookmarks')">
-              Bookmarks
-              <q-space />
-              <q-icon name="keyboard_arrow_right"></q-icon>
-            </q-item>
-          </q-list>
-        </q-page-container>
-      </q-layout>
+    <q-drawer
+      v-model="rightDrawerState"
+      side="right"
+      show-if-above
+      no-swipe-close
+    >
+      <drawer-layout v-model="rightDrawerState">
+        <quasar-links />
+      </drawer-layout>
     </q-drawer>
 
     <q-drawer
@@ -122,29 +89,9 @@
       show-if-above
       no-swipe-close
     >
-      <q-layout view="lHh Lpr lFf">
-        <q-header>
-          <q-toolbar
-            bg-color="primary"
-          >
-            <q-btn
-              icon="close"
-              aria-label="Menu"
-              @click="leftDrawerState = !leftDrawerState"
-              class="font-size-12"
-              flat
-              dense
-              round
-            />
-            <q-space />
-            <q-toolbar-title class="font-size-12">QUiN v0.0.1-alpha.1</q-toolbar-title>
-          </q-toolbar>
-        </q-header>
-
-        <q-page-container>
-          <component :is="settingsComponent" />
-        </q-page-container>
-      </q-layout>
+      <drawer-layout v-model="settingDrawerState" @input="leftDrawerState = !leftDrawerState">
+        <component :is="settingsComponent" />
+      </drawer-layout>
     </q-drawer>
 
     <q-page-container class="popup_container">

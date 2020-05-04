@@ -4,6 +4,9 @@ import SearchSettingsComponent from 'components/settings/SearchSettings'
 import BookmarkSettingsComponent from 'components/settings/BookmarkSettings'
 import { LOAD_SETTINGS } from '../store/settings/types'
 import dbService from '../services/dbService'
+import QuasarLinksComponent from 'components/QuasarLinks'
+import SettingsIndexComponent from 'components/settings'
+import DrawerLayout from 'components/DrawerLayout'
 
 @Component({
   preFetch ({ store }) {
@@ -12,11 +15,15 @@ import dbService from '../services/dbService'
   components: {
     notifications: NotificationsComponent,
     searchSettings: SearchSettingsComponent,
-    bookmarkSettings: BookmarkSettingsComponent
+    bookmarkSettings: BookmarkSettingsComponent,
+    quasarLinks: QuasarLinksComponent,
+    settings: SettingsIndexComponent,
+    drawerLayout: DrawerLayout
   }
 })
 export default class PopoutLayout extends Vue {
   public leftDrawerState = false
+  public rightDrawerState = false
   public settingDrawerState = false
   public selectedTab = 'notifications'
   public search = ''
@@ -25,9 +32,12 @@ export default class PopoutLayout extends Vue {
 
   public get settingsComponent () {
     switch (this.settingsSelection) {
-      case 'search': return 'search-settings'
-      case 'notifications': return 'notification-settings'
-      case 'bookmarks': return 'bookmark-settings'
+      case 'search':
+        return 'search-settings'
+      case 'notifications':
+        return 'notification-settings'
+      case 'bookmarks':
+        return 'bookmark-settings'
     }
   }
 
