@@ -20,4 +20,8 @@ export default function attachContentHooks (bridge) {
   bridge.on('dom.bookmarks.bg', event => {
     bridge.send('dom.bookmarks', { ...event.data })
   })
+
+  bridge.on('redirect.quasar.bg', event => {
+    bridge.send('redirect.quasar', event.data)
+  })
 }

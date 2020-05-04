@@ -52,7 +52,8 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
         let found = false
         for (const tab of tabs) {
           if (tab.url.indexOf('quasar.dev') > -1) {
-            chrome.tabs.update(tab.id, { url, highlighted: true })
+            chrome.tabs.update(tab.id, { highlighted: true })
+            bridge.send('redirect.quasar.bg', event.data)
             found = true
           }
         }
@@ -84,14 +85,12 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
   })
 
   bridge.on('remove.bookmark.bg', event => {
-    console.log('REMOVING: ', event.data)
     chrome.storage.local.remove(event.data.key)
   })
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (tab.url.toLowerCase().indexOf('quasar.dev') > -1 && changeInfo.status === 'complete') {
-    console.log('URL updated: ', tabId, tab.url, changeInfo)
     chrome.storage.local.get(null, r => {
       const result = []
 
@@ -104,7 +103,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       }
 
       const bookmarks = result.filter(f => f.type === 'bookmark')
-      console.log('SENDING', bookmarks)
       Bridge.send('dom.bookmarks.bg', {
         bookmarks
       })
