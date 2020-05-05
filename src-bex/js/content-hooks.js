@@ -2,9 +2,11 @@
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/content-hooks
 
 export default function attachContentHooks (bridge) {
+  /*
   bridge.on('quasar.detect', event => {
     // console.log('Quasar Detected!', event.data)
   })
+  */
 
   bridge.on('add.bookmark', event => {
     bridge.send('add.bookmark.bg', event.data).then(payload => {

@@ -2,7 +2,7 @@
   <div class="row items-center justify-around">
     <q-scroll-area
       class="flex flex-center"
-      style="height: 400px; width: 100%;"
+      style="height: 486px; width: 100%;"
     >
       <h5 class="text-center">Latest Quasar News Coming Soon!</h5>
     </q-scroll-area>
