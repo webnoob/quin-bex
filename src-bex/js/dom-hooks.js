@@ -87,6 +87,8 @@ export default function attachDomHooks (bridge) {
 
   bridge.on('redirect.quasar', event => {
     const qInstance = document.getElementById('q-app').__vue__
-    qInstance.$parent._router.push(event.data.url.replace('https://quasar.dev', ''))
+    if (event.data.existingUrl.indexOf(qInstance.$parent._route.fullPath) > -1) {
+      qInstance.$parent._router.push(event.data.url.replace('https://quasar.dev', ''))
+    }
   })
 }

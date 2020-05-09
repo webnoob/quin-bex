@@ -52,8 +52,12 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
         for (const tab of tabs) {
           if (tab.url.indexOf('quasar.dev') > -1) {
             chrome.tabs.update(tab.id, { highlighted: true })
-            bridge.send('redirect.quasar.bg', event.data)
+            bridge.send('redirect.quasar.bg', {
+              url: event.data.url,
+              existingUrl: tab.url
+            })
             found = true
+            break
           }
         }
 

@@ -14,7 +14,7 @@
           round
         />
         <q-space />
-        <q-toolbar-title class="font-size-12">QUiN v0.0.1-alpha.1</q-toolbar-title>
+        <q-toolbar-title class="font-size-12">QUiN v0.0.1-alpha.2</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
