@@ -20,7 +20,7 @@
         </q-toolbar-title>
 
         <q-btn
-          icon="bookmark"
+          icon="link"
           aria-label="Menu"
           @click="rightDrawerState = !rightDrawerState"
           class="font-size-12"
