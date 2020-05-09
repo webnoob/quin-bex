@@ -1,0 +1,22 @@
+.search-result__item
+  flex-wrap: wrap
+
+  span:first-of-type
+    min-width: 100px
+    color: $grey-5
+    margin-right: 5px
+    text-align: right
+
+    &:after
+      content: '|'
+      margin-left: 5px
+
+  span:not(:first-of-type)
+    color: #000
+    font-weight: bold
+    margin-right: 5px
+
+    &:not(:last-child)
+      &:after
+        content: '>'
+        margin-left: 5px

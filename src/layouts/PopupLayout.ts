@@ -9,8 +9,29 @@ import DrawerLayout from 'components/DrawerLayout'
 import Bookmarks from 'components/tabs/bookmarks/Bookmarks'
 import BookmarksTree from 'components/tabs/bookmarks/BookmarksTree'
 import BookmarksList from 'components/tabs/bookmarks/BookmarksList'
+import { SearchResultInterface } from '../types'
+import SearchResults from 'components/SearchResults'
+
+interface AlgoliaSearchResult {
+  anchor: string;
+  content?: string;
+  hierarchy: {
+    lvl0: string;
+    lvl1: string;
+    lvl2: string;
+    lvl3: string;
+    lvl4: string;
+    lvl5: string;
+    lvl6: string;
+  };
+  objectID: string;
+  url: string;
+}
+
+const hitsPerPage = 7
 
 @Component({
+  // @ts-ignore
   async preFetch ({ store }) {
     await store.dispatch(LOAD_SETTINGS)
   },
@@ -23,15 +44,28 @@ import BookmarksList from 'components/tabs/bookmarks/BookmarksList'
     bookmarkSettings: BookmarkSettings,
     quasarLinks: QuasarLinks,
     settings: SettingsIndex,
-    drawerLayout: DrawerLayout
+    drawerLayout: DrawerLayout,
+    SearchResults
   }
 })
 export default class PopoutLayout extends Vue {
   public leftDrawerState = false
   public rightDrawerState = false
   public settingDrawerState = false
-  public search = ''
   public settingsSelection = ''
+  public search = ''
+  public searchResults: SearchResultInterface[] = []
+
+  public get savedSearch () {
+    return this.$store.getters.settings.search
+  }
+
+  public set savedSearch (value: string) {
+    this.$store.dispatch(SET_STRING_SETTING, {
+      field: 'search',
+      value
+    })
+  }
 
   public get selectedTab () {
     return this.$store.getters.settings.lastTab
@@ -77,15 +111,63 @@ export default class PopoutLayout extends Vue {
         indexName: 'quasar-framework',
         inputSelector: '.doc-algolia input',
         algoliaOptions: {
-          hitsPerPage: 7
+          hitsPerPage: hitsPerPage
         },
-        handleSelected: (a: any, b: any, suggestion: any) => {
-          this.$q.bex.send('redirect.user', {
-            url: suggestion.url,
-            openInNewTab: this.$store.getters.settings.searchInNewTab
-          })
+        transformData: (hits: AlgoliaSearchResult[]) => {
+          this.searchResults = this.transformSearchResults(hits)
         }
       })
+
+      this.search = this.savedSearch
+      // @ts-ignore
+      this.$refs.docAlgolia.focus()
+      setTimeout(() => {
+        // @ts-ignore
+        this.$refs.docAlgolia.$refs.input.dispatchEvent(new Event('input', {
+          bubbles: true
+        }))
+      })
     })
+  }
+
+  public doOnSearchInput () {
+    this.savedSearch = this.search
+    if (this.search === '') {
+      this.searchResults = []
+    }
+  }
+
+  private htmlDecode (input: string) {
+    const doc = new DOMParser().parseFromString(input, 'text/html')
+    return doc.documentElement.textContent || ''
+  }
+
+  private transformSearchResults (results: AlgoliaSearchResult[]): SearchResultInterface[] {
+    const allResults: SearchResultInterface[] = []
+    for (const result of results) {
+      let existingGroup = allResults.find(f => f.groupName === result.hierarchy.lvl0)
+      if (existingGroup === void 0) {
+        existingGroup = {
+          groupName: result.hierarchy.lvl0,
+          children: []
+        }
+        allResults.push(existingGroup)
+      }
+
+      const items: string[] = []
+      for (let i = 1; i < hitsPerPage; i++) {
+        const text = result.hierarchy['lvl' + i]
+        if (text) {
+          items.push(this.htmlDecode(text))
+        }
+      }
+
+      existingGroup.children.push({
+        url: result.url,
+        id: result.objectID,
+        items
+      })
+    }
+    return allResults
   }
 }

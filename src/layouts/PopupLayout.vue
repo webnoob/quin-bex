@@ -36,7 +36,7 @@
           class="search full-width doc-algolia"
           bg-color="white"
           ref="docAlgolia"
-          autofocus
+          @input="doOnSearchInput"
           dense
         >
           <template #append>
@@ -52,9 +52,10 @@
       </q-toolbar>
 
       <q-toolbar class="tabs">
-        <q-tabs class="full-width" :value="selectedTab" @input="tabChanged" dense>
-          <q-tab name="notifications" no-caps>Notifications</q-tab>
-          <q-tab name="bookmarks" no-caps>QBookmarks</q-tab>
+        <q-tabs class="full-width" align="justify" :value="selectedTab" @input="tabChanged" dense>
+          <q-tab name="search" icon="search" />
+          <q-tab name="notifications" icon="notifications" />
+          <q-tab name="bookmarks" icon="bookmark" />
         </q-tabs>
       </q-toolbar>
     </q-header>
@@ -96,6 +97,7 @@
 
     <q-page-container class="popup_container">
       <q-tab-panels v-model="selectedTab">
+        <q-tab-panel name="search" class="q-pa-none"><search-results :data="searchResults" /></q-tab-panel>
         <q-tab-panel name="notifications" class="q-pa-none"><notifications /></q-tab-panel>
         <q-tab-panel name="bookmarks" class="q-pa-none">
           <q-scroll-area
