@@ -5,7 +5,7 @@
         bg-color="primary"
       >
         <q-btn
-          icon="close"
+          :icon="icon || 'close'"
           aria-label="Menu"
           @click="close"
           class="font-size-12"

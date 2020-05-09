@@ -90,7 +90,7 @@
       show-if-above
       no-swipe-close
     >
-      <drawer-layout v-model="settingDrawerState" @input="leftDrawerState = !leftDrawerState">
+      <drawer-layout v-model="settingDrawerState" @input="leftDrawerState = !leftDrawerState" icon="arrow_back">
         <component :is="settingsComponent" />
       </drawer-layout>
     </q-drawer>
