@@ -11,6 +11,16 @@
   "browser_action": {
     "default_popup": "www/index.html#/popup"
   },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Q",
+        "linux": "Ctrl+Q",
+        "windows": "Ctrl+Q",
+        "mac": "Ctrl+Q"
+      }
+    }
+  },
   "background": {
     "scripts": [
       "www/bex-background.js",
