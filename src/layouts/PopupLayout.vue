@@ -37,6 +37,7 @@
           bg-color="white"
           ref="docAlgolia"
           @input="doOnSearchInput"
+          @focus="$event.target.select()"
           dense
         >
           <template #append>

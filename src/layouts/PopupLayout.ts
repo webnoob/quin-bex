@@ -11,6 +11,7 @@ import BookmarksTree from 'components/tabs/bookmarks/BookmarksTree'
 import BookmarksList from 'components/tabs/bookmarks/BookmarksList'
 import { SearchResultInterface } from '../types'
 import SearchResults from 'components/SearchResults'
+import { QInput } from 'quasar'
 
 interface AlgoliaSearchResult {
   anchor: string;
@@ -119,11 +120,11 @@ export default class PopoutLayout extends Vue {
       })
 
       this.search = this.savedSearch
-      // @ts-ignore
-      this.$refs.docAlgolia.focus()
+      const algoliaInput = this.$refs.docAlgolia as QInput
+      algoliaInput.focus()
       setTimeout(() => {
-        // @ts-ignore
-        this.$refs.docAlgolia.$refs.input.dispatchEvent(new Event('input', {
+        algoliaInput.select()
+        ;(algoliaInput.$refs.input as HTMLInputElement).dispatchEvent(new Event('input', {
           bubbles: true
         }))
       })
