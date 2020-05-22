@@ -1,6 +1,6 @@
 {
-  "name": "quasar-browser-extension",
-  "description": "A Quasar web extension",
+  "name": "quin-bex",
+  "description": "QUiN - Quasar Update Notifier",
   "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
