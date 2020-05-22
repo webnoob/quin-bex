@@ -38,6 +38,7 @@
           ref="docAlgolia"
           @input="doOnSearchInput"
           @focus="$event.target.select()"
+          borderless
           dense
         >
           <template #append>
