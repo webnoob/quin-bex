@@ -100,7 +100,14 @@
     <q-page-container class="popup_container">
       <q-tab-panels v-model="selectedTab">
         <q-tab-panel name="search" class="q-pa-none"><search-results :data="searchResults" /></q-tab-panel>
-        <q-tab-panel name="notifications" class="q-pa-none"><notifications /></q-tab-panel>
+        <q-tab-panel name="notifications" class="q-pa-none">
+          <q-scroll-area
+            class="flex flex-center"
+            style="height: 486px; width: 100%;"
+          >
+            <notifications />
+          </q-scroll-area>
+        </q-tab-panel>
         <q-tab-panel name="bookmarks" class="q-pa-none">
           <q-scroll-area
             class="flex flex-center"

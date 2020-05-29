@@ -54,3 +54,12 @@ export interface Bookmark {
   label?: string;
   id: string;
 }
+
+export interface QuasarNotification {
+  id: string;
+  title: string;
+  message: string;
+  link: string;
+  postNotifacation: boolean;
+  date: string;
+}

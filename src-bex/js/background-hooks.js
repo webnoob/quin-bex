@@ -2,59 +2,47 @@
 // Note: Events sent from this background script using `bridge.send` can be `listen`'d for by all client BEX bridges for this BEX
 
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/background-hooks
-import { v4 as uuidv4 } from 'uuid'
+import { initFirebase } from './lib/firebase'
+import db from 'app/src-bex/js/lib/db'
+
 let Bridge
 
 const sendBookmarksToDom = () => {
-  chrome.storage.local.get(null, r => {
-    const result = []
-
-    // Group the items up into an array to take advantage of the bridge's chunk splitting.
-    for (const itemKey in r) {
-      result.push({
-        key: itemKey,
-        ...r[itemKey]
-      })
-    }
-
-    const bookmarks = result.filter(f => f.type === 'bookmark')
+  db.getByType('bookmark').then(bookmarks => {
     Bridge.send('dom.bookmarks.bg', {
       bookmarks
     })
   })
 }
 
+initFirebase(Bridge)
+
 export default function attachBackgroundHooks (bridge /* , allActiveConnections */) {
   Bridge = bridge
+
   bridge.on('storage.get', event => {
     const payload = event.data
     if (payload.key === null) {
-      chrome.storage.local.get(null, r => {
-        const result = []
-
-        // Group the items up into an array to take advantage of the bridge's chunk splitting.
-        for (const itemKey in r) {
-          result.push(r[itemKey])
-        }
+      db.getAll().then(result => {
         bridge.send(event.eventResponseKey, result)
       })
     } else {
-      chrome.storage.local.get([payload.key], r => {
-        bridge.send(event.eventResponseKey, r[payload.key])
+      db.getByKey(payload.key).then(result => {
+        bridge.send(event.eventResponseKey, result)
       })
     }
   })
 
   bridge.on('storage.set', event => {
     const payload = event.data
-    chrome.storage.local.set({ [payload.key]: payload.data }, () => {
+    db.set(payload.key, payload.data).then(() => {
       bridge.send(event.eventResponseKey, payload.data)
     })
   })
 
   bridge.on('storage.remove', event => {
     const payload = event.data
-    chrome.storage.local.remove(payload.key, () => {
+    db.remove(payload.key).then(() => {
       bridge.send(event.eventResponseKey, payload.data)
     })
   })
@@ -89,30 +77,16 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
   })
 
   bridge.on('add.bookmark.bg', event => {
-    const id = uuidv4()
-    const key = 'bookmark.' + id
-    const model = {
-      type: 'bookmark',
-      url: event.data.url,
-      id
-    }
-
-    chrome.storage.local.set({
-      [key]: model
-    }, () => {
-      // nothing
-    })
-
-    bridge.send(event.eventResponseKey, {
-      ...model,
-      key
+    db.add('bookmark', event.data).then(bookmark => {
+      bridge.send(event.eventResponseKey, bookmark)
     })
   })
 
   bridge.on('remove.bookmark.bg', event => {
-    chrome.storage.local.remove(event.data.key)
-    bridge.send(event.eventResponseKey)
-    sendBookmarksToDom()
+    db.remove(event.data.key).then(() => {
+      bridge.send(event.eventResponseKey)
+      sendBookmarksToDom()
+    })
   })
 }
 

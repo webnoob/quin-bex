@@ -14,7 +14,7 @@
         <q-expansion-item
           v-for="searchResult in data"
           :key="searchResult.id"
-          :label="searchResult.groupName"
+          :label="htmlDecode(searchResult.groupName)"
           header-class="bg-grey-5"
           expand-separator
           dense
