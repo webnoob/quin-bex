@@ -117,6 +117,7 @@ export default class PopoutLayout extends Vue {
   }
 
   public doOnSearchInput () {
+    this.tabChanged('search')
     this.savedSearch = this.search
     if (this.search === '') {
       this.searchResults = []
