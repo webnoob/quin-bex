@@ -1,12 +1,11 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { SearchResultInterface } from '../types'
+import { SearchResult } from '../types'
 
 @Component
 export default class SearchResults extends Vue {
-  @Prop({ type: Array }) public readonly data!: SearchResultInterface[]
+  @Prop({ type: Array }) public readonly data!: SearchResult[]
 
   public navigateTo (url: string) {
-    console.log(url)
     this.$q.bex.send('redirect.user', {
       url: url,
       openInNewTab: this.$store.getters.settings.searchInNewTab

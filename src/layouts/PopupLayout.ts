@@ -9,25 +9,10 @@ import DrawerLayout from 'components/DrawerLayout'
 import Bookmarks from 'components/tabs/bookmarks/Bookmarks'
 import BookmarksTree from 'components/tabs/bookmarks/BookmarksTree'
 import BookmarksList from 'components/tabs/bookmarks/BookmarksList'
-import { SearchResultInterface } from '../types'
+import { AlgoliaSearchResult, SearchResult, SearchResultItem } from '../types'
 import SearchResults from 'components/SearchResults'
 import { QInput } from 'quasar'
-
-interface AlgoliaSearchResult {
-  anchor: string;
-  content?: string;
-  hierarchy: {
-    lvl0: string;
-    lvl1: string;
-    lvl2: string;
-    lvl3: string;
-    lvl4: string;
-    lvl5: string;
-    lvl6: string;
-  };
-  objectID: string;
-  url: string;
-}
+import { v4 as uuidv4 } from 'uuid'
 
 const hitsPerPage = 7
 
@@ -55,7 +40,7 @@ export default class PopoutLayout extends Vue {
   public settingDrawerState = false
   public settingsSelection = ''
   public search = ''
-  public searchResults: SearchResultInterface[] = []
+  public searchResults: SearchResult[] = []
 
   public get savedSearch () {
     return this.$store.getters.settings.search
@@ -138,37 +123,69 @@ export default class PopoutLayout extends Vue {
     }
   }
 
-  private htmlDecode (input: string) {
-    const doc = new DOMParser().parseFromString(input, 'text/html')
-    return doc.documentElement.textContent || ''
-  }
+  private transformSearchResults (results: AlgoliaSearchResult[]): SearchResult[] {
+    const allResults: SearchResult[] = []
 
-  private transformSearchResults (results: AlgoliaSearchResult[]): SearchResultInterface[] {
-    const allResults: SearchResultInterface[] = []
     for (const result of results) {
-      let existingGroup = allResults.find(f => f.groupName === result.hierarchy.lvl0)
+      // Get the first item and add it to our array as a group heading if it doesn't already exist.
+      // Otherwise just return the existing one so we're not adding duplicates
+      let existingGroup = allResults.find(f => f.groupName === result._highlightResult.hierarchy.lvl0.value)
       if (existingGroup === void 0) {
         existingGroup = {
-          groupName: result.hierarchy.lvl0,
+          id: uuidv4(),
+          groupName: result._highlightResult.hierarchy.lvl0.value,
           children: []
         }
         allResults.push(existingGroup)
       }
 
-      const items: string[] = []
+      // Now go through all our results (excluding the first one which we manually added) and add them as
+      // children to the current group.
+      const items: SearchResultItem[] = []
       for (let i = 1; i < hitsPerPage; i++) {
-        const text = result.hierarchy['lvl' + i]
+        const data = result._highlightResult.hierarchy['lvl' + i]
+        if (data === void 0) break
+
+        const text = data.value
         if (text) {
-          items.push(this.htmlDecode(text))
+          items.push({
+            id: uuidv4(),
+            type: 'heading',
+            text: text
+          })
         }
       }
 
+      // If there is a snippet then add it at the end.
+      if (result._snippetResult) {
+        let text = result._snippetResult.content.value
+
+        // If our first char isn't a capital then it's cut in the middle of a sentence so ellipsis it.
+        // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
+        if (text[0] !== text[0].toUpperCase()) {
+          text = '\u2026' + text
+        }
+
+        // If our last char isn't a sentence stopper, add ellipsis
+        if (!['.', '!', '?'].includes(text[text.length - 1])) {
+          text = text + '\u2026'
+        }
+
+        items.push({
+          id: uuidv4(),
+          type: 'content',
+          text
+        })
+      }
+
+      // Add the items we've just generated to our parent group
       existingGroup.children.push({
         url: result.url,
         id: result.objectID,
         items
       })
     }
+
     return allResults
   }
 }

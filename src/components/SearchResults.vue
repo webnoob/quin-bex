@@ -13,7 +13,7 @@
       <q-list class="rounded-borders">
         <q-expansion-item
           v-for="searchResult in data"
-          :key="searchResult.groupName"
+          :key="searchResult.id"
           :label="searchResult.groupName"
           header-class="bg-grey-5"
           expand-separator
@@ -33,7 +33,13 @@
               clickable
               dense
             >
-              <span class="font-size-12" v-for="item in child.items" :key="item">{{item}}</span>
+              <span
+                v-for="item in child.items"
+                :key="item.id"
+                class="search-child-item font-size-12"
+                :class="item.type"
+                v-html="item.text"
+              />
             </q-item>
           </q-list>
         </q-expansion-item>

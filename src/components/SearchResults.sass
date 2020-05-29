@@ -1,22 +1,42 @@
-.search-result__item
-  flex-wrap: wrap
+.search-result__items
+  .q-item
+    min-height: unset
 
-  span:first-of-type
-    min-width: 100px
-    color: $grey-5
-    margin-right: 5px
-    text-align: right
+  .search-result__item
+    width: 100%
+    display: inline-block
+    padding: $flex-gutter-xs $flex-gutter-sm !important
+    border-bottom: 1px solid $grey-5
 
-    &:after
-      content: '|'
-      margin-left: 5px
+    span.highlight
+      color: $primary
+      font-weight: bold
 
-  span:not(:first-of-type)
-    color: #000
-    font-weight: bold
-    margin-right: 5px
+    span.search-child-item
+      .algolia-docsearch-suggestion--highlight
+        color: $primary
 
-    &:not(:last-child)
-      &:after
-        content: '>'
-        margin-left: 5px
+      &:first-of-type
+        width: 100px - $flex-gutter-sm
+        min-width: 100px - $flex-gutter-sm
+        color: $grey-5
+        margin-right: $flex-gutter-xs
+        text-align: right
+        float: left
+        padding: 2px 5px 0 0
+        border-right: 1px solid $grey-5
+
+      &:not(:first-of-type)
+        color: #000
+        font-weight: bold
+        margin-right: $flex-gutter-xs
+
+        &:not(:last-child)
+          &:after
+            content: '>'
+            margin-left: $flex-gutter-xs
+
+      &.content
+        font-weight: normal
+
+
