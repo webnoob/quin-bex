@@ -41,6 +41,7 @@ export default class PopoutLayout extends Vue {
   public settingsSelection = ''
   public search = ''
   public searchResults: SearchResult[] = []
+  public focused!: any
 
   public get savedSearch () {
     return this.$store.getters.settings.search
@@ -105,14 +106,49 @@ export default class PopoutLayout extends Vue {
       })
 
       this.search = this.savedSearch
-      const algoliaInput = this.$refs.docAlgolia as QInput
-      algoliaInput.focus()
-      setTimeout(() => {
-        algoliaInput.select()
-        ;(algoliaInput.$refs.input as HTMLInputElement).dispatchEvent(new Event('input', {
-          bubbles: true
-        }))
-      })
+      this.focusAlgolia()
+    })
+
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+        const allSearchNodes = document.querySelectorAll('.doc-algolia input, .search-result__item')
+        if (this.focused === void 0) {
+          // 0 index is our search box, assume if this is empty then we select first search result instead
+          this.focused = allSearchNodes[1]
+        } else {
+          const nodeLength = allSearchNodes.length
+          for (let i = 0; i < nodeLength; i++) {
+            if (allSearchNodes[i] === this.focused) {
+              const newIndex = e.key === 'ArrowUp'
+                ? i - 1 >= 0 ? i - 1 : nodeLength - 1
+                : i + 1 < nodeLength ? i + 1 : 0
+              this.focused = allSearchNodes[newIndex]
+              break
+            }
+          }
+        }
+
+        if (this.focused instanceof HTMLInputElement) {
+          this.focusAlgolia()
+        } else {
+          this.focused.focus()
+        }
+      } else if (e.key === 'Enter') {
+        if (this.focused !== void 0) {
+          this.focused.click()
+        }
+      }
+    })
+  }
+
+  public focusAlgolia () {
+    const algoliaInput = this.$refs.docAlgolia as QInput
+    algoliaInput.focus()
+    setTimeout(() => {
+      algoliaInput.select()
+      ;(algoliaInput.$refs.input as HTMLInputElement).dispatchEvent(new Event('input', {
+        bubbles: true
+      }))
     })
   }
 
