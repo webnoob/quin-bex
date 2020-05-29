@@ -5,7 +5,6 @@
       :key="bookmark.label"
       :label="bookmark.label"
       :header-inset-level="(bookmark.level - 1) / 8"
-      :icon="bookmark.children.length === 0 ? 'share' : ''"
       :expand-icon="bookmark.children.length === 0 ? '0' : void 0"
       @click="bookmark.children.length === 0 ? redirectToBookmark(bookmark) : void 0"
       default-opened

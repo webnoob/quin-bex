@@ -1,19 +1,22 @@
 <template>
-  <div>
-    <q-btn
+  <q-list>
+    <q-item
       v-for="bookmark in bookmarks"
       :key="bookmark.url"
-      @click="redirectToBookmark(bookmark)"
-      icon="share"
-      class="font-size-12 flex justify-start q-pa-xs full-width bookmark-btn"
+      class="flex flex-center"
       align="left"
-      flat
       dense
-      no-caps
+      clickable
     >
-      {{ bookmark.label }}
-    </q-btn>
-  </div>
+      <q-item-section @click="redirectToBookmark(bookmark)" class="cursor-pointer">
+        {{ bookmark.label }}
+      </q-item-section>
+
+      <q-item-section side>
+        <q-btn icon="delete" color="negative" @click="deleteBookmark(bookmark)" flat />
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script lang="ts" src="./Bookmarks.ts" />

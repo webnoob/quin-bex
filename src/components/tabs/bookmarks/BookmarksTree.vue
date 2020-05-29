@@ -12,7 +12,6 @@
           </div>
           <q-btn
             @click="redirectToBookmark(prop.node)"
-            icon="share"
             class="font-size-12 bookmark-btn"
             flat
             dense
@@ -21,6 +20,7 @@
           >
             {{ prop.node.label }}
           </q-btn>
+          <q-btn v-if="prop.node.children.length === 0" icon="delete" color="negative" @click="deleteBookmark(prop.node.bookmark)" flat />
         </div>
       </template>
     </q-tree>

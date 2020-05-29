@@ -13,32 +13,26 @@ export default function attachDomHooks (bridge) {
     const anchorIndex = window.location.href.indexOf('#')
     const domain = href.substring(0, anchorIndex > -1 ? anchorIndex : href.length)
 
+    // Remove existing bookmark icons. this is easier than look for the ones we've already added as we don't have
+    // consistent ids to select.
+    ;[].forEach.call(document.querySelectorAll('.quin-injected-icon'), (e) => {
+      e.parentNode.removeChild(e)
+    })
+
     for (const el of allHeadings) {
       const thisUrl = domain + '#' + el.id
       let existingBookmark = existingBookmarks.find(s => s.url === thisUrl)
       let alreadyBookmarked = existingBookmark !== void 0
 
-      // Can't do the item check like this because not all Quasars heading ids are valid ids ie:
-      // #Submitting-to-a-URL-(native-form-submit)
-      // Instead we use a yucky loop to find the node that matches ours...
-      // I assume there is a better way but I'm too stupid to see it :)
-      // let item = document.querySelector('#' + el.id + ' i.quin-injected-icon')
-      let item
-      for (const node of el.childNodes) {
-        if (node.toString().includes('<i class="quin-injected-icon')) {
-          item = node
-        }
-      }
-
-      if (item === void 0) {
-        item = document.createElement('i')
-        item.className = 'quin-injected-icon material-icons'
-        el.append(item)
-      }
+      // inject our bookmark icon
+      const item = document.createElement('i')
+      item.className = 'quin-injected-icon material-icons'
+      el.append(item)
 
       let createRemoveBookmarkHandler = void 0
       let createAddBookmarkHandler = void 0
 
+      // Handler for the delete bookmark. Will unsubscribe itself and attach an add bookmark listener instead
       createRemoveBookmarkHandler = (item) => {
         const cb = (e) => {
           e.stopPropagation()
@@ -57,6 +51,7 @@ export default function attachDomHooks (bridge) {
         item.addEventListener('click', cb)
       }
 
+      // Handler for the add bookmark. Will unsubscribe itself and attach a remove bookmark listener instead
       createAddBookmarkHandler = (item) => {
         const cb = (e) => {
           e.stopPropagation()
@@ -75,6 +70,7 @@ export default function attachDomHooks (bridge) {
         item.addEventListener('click', cb)
       }
 
+      // Create our handlers for the icon depending on whether it's been added already or not.
       if (alreadyBookmarked) {
         item.innerText = 'bookmark'
         createRemoveBookmarkHandler(item)

@@ -40,3 +40,17 @@ export interface SearchResult {
     items: SearchResultItem[];
   }[];
 }
+
+export interface GroupedBookmark {
+  label: string;
+  level: number;
+  url: string;
+  children: GroupedBookmark[];
+  bookmark: Bookmark;
+}
+
+export interface Bookmark {
+  url: string;
+  label?: string;
+  id: string;
+}

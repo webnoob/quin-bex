@@ -1,5 +1,5 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Bookmark, GroupedBookmark } from './mixins/bookmarksMixin'
+import { Bookmark, GroupedBookmark } from '../../../types'
 
 @Component
 export default class BookmarksListItem extends Vue {

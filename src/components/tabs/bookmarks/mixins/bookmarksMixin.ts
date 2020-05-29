@@ -1,17 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import dbService from '../../../../services/dbService'
-
-export interface GroupedBookmark {
-  label: string;
-  level: number;
-  url: string;
-  children: GroupedBookmark[];
-}
-
-export interface Bookmark {
-  url: string;
-  label?: string;
-}
+import { Bookmark, GroupedBookmark } from '../../../../types'
 
 @Component
 export default class BookmarksMixin extends Vue {
@@ -38,7 +27,7 @@ export default class BookmarksMixin extends Vue {
    * @param url
    * @param level
    */
-  public addPartsToNode (parentNode: GroupedBookmark[], url: string, level: number, parentUrl: string) {
+  public addPartsToNode (parentNode: GroupedBookmark[], url: string, level: number, parentUrl: string, bookmark: Bookmark) {
     const parts = this.getUrlParts(url)
     if (parts.length === 0) return
 
@@ -51,13 +40,14 @@ export default class BookmarksMixin extends Vue {
         label: parts[0],
         level,
         url: thisUrl,
-        children: []
+        children: [],
+        bookmark
       }
 
       parentNode.push(node)
     }
 
-    this.addPartsToNode(node.children, parts[1], level + 1, thisUrl)
+    this.addPartsToNode(node.children, parts[1], level + 1, thisUrl, bookmark)
   }
 
   public groupBookmarks (bookmarks: Bookmark[]) {
@@ -65,7 +55,7 @@ export default class BookmarksMixin extends Vue {
       // Going forward we might bookmark more sites but for now, remove quasar.dev so it doesn't work as a top level node
       const quasarUrl = 'https://quasar.dev/'
       const url = bookmark.url.replace(quasarUrl, '')
-      this.addPartsToNode(this.groupedBookmarks, url, 1, quasarUrl.substr(0, quasarUrl.length - 1))
+      this.addPartsToNode(this.groupedBookmarks, url, 1, quasarUrl.substr(0, quasarUrl.length - 1), bookmark)
     }
   }
 
@@ -77,13 +67,16 @@ export default class BookmarksMixin extends Vue {
       }
 
       this.bookmarks.push({
-        label: bookmark.url.substring(lastIndex),
-        url: bookmark.url
+        id: bookmark.id,
+        url: bookmark.url,
+        label: bookmark.url.substring(lastIndex)
       })
     }
   }
 
   public loadBookmarks () {
+    this.groupedBookmarks = []
+    this.bookmarks = []
     dbService.getAll('bookmark').then(bookmarks => {
       if (this.group === true) {
         this.groupBookmarks(bookmarks)
@@ -97,6 +90,16 @@ export default class BookmarksMixin extends Vue {
     this.$q.bex.send('redirect.user', {
       url: bookmark.url,
       openInNewTab: this.$store.getters.settings.openBookmarksInNewTab
+    })
+  }
+
+  public deleteBookmark (bookmark: Bookmark) {
+    // Not using the db service here as using the bg hook version will automatically send the new bookmark list to the dom
+    // and remove the bookmarked icon.
+    this.$q.bex.send('remove.bookmark.bg', {
+      key: 'bookmark.' + bookmark.id
+    }).then(() => {
+      this.loadBookmarks()
     })
   }
 

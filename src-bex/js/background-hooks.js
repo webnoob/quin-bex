@@ -4,6 +4,26 @@
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/background-hooks
 import { v4 as uuidv4 } from 'uuid'
 let Bridge
+
+const sendBookmarksToDom = () => {
+  chrome.storage.local.get(null, r => {
+    const result = []
+
+    // Group the items up into an array to take advantage of the bridge's chunk splitting.
+    for (const itemKey in r) {
+      result.push({
+        key: itemKey,
+        ...r[itemKey]
+      })
+    }
+
+    const bookmarks = result.filter(f => f.type === 'bookmark')
+    Bridge.send('dom.bookmarks.bg', {
+      bookmarks
+    })
+  })
+}
+
 export default function attachBackgroundHooks (bridge /* , allActiveConnections */) {
   Bridge = bridge
   bridge.on('storage.get', event => {
@@ -69,11 +89,14 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
   })
 
   bridge.on('add.bookmark.bg', event => {
-    const key = 'bookmark.' + uuidv4()
+    const id = uuidv4()
+    const key = 'bookmark.' + id
     const model = {
       type: 'bookmark',
-      url: event.data.url
+      url: event.data.url,
+      id
     }
+
     chrome.storage.local.set({
       [key]: model
     }, () => {
@@ -88,26 +111,13 @@ export default function attachBackgroundHooks (bridge /* , allActiveConnections 
 
   bridge.on('remove.bookmark.bg', event => {
     chrome.storage.local.remove(event.data.key)
+    bridge.send(event.eventResponseKey)
+    sendBookmarksToDom()
   })
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (tab.url.toLowerCase().indexOf('quasar.dev') > -1 && changeInfo.status === 'complete') {
-    chrome.storage.local.get(null, r => {
-      const result = []
-
-      // Group the items up into an array to take advantage of the bridge's chunk splitting.
-      for (const itemKey in r) {
-        result.push({
-          key: itemKey,
-          ...r[itemKey]
-        })
-      }
-
-      const bookmarks = result.filter(f => f.type === 'bookmark')
-      Bridge.send('dom.bookmarks.bg', {
-        bookmarks
-      })
-    })
+    sendBookmarksToDom()
   }
 })
