@@ -55,11 +55,11 @@ export interface Bookmark {
   id: string;
 }
 
-export interface QuasarNotification {
+export type QuasarNotification = {
   id: string;
   title: string;
   message: string;
   link: string;
-  postNotifacation: boolean;
+  postNotification: boolean;
   date: string;
 }

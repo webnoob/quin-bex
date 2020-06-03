@@ -19,7 +19,9 @@ module.exports = configure(function (ctx) {
     boot: [
       'components',
       'i18n',
-      'axios'
+      'axios',
+      'firebase',
+      'authGuard'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
