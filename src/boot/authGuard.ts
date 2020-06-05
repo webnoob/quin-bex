@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import * as firebase from 'firebase'
 
-export default boot(({ Vue, router }) => {
+export default boot(({ router }) => {
   router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (firebase.auth().currentUser !== null) {

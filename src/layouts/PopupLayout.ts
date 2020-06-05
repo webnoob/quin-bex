@@ -13,6 +13,7 @@ import { AlgoliaSearchResult, SearchResult, SearchResultItem } from '../types'
 import SearchResults from 'components/SearchResults'
 import { QInput } from 'quasar'
 import { v4 as uuidv4 } from 'uuid'
+import NotificationSettings from 'components/settings/NotificationSettings'
 
 const hitsPerPage = 7
 
@@ -27,6 +28,7 @@ const hitsPerPage = 7
     bookmarksTree: BookmarksTree,
     bookmarksList: BookmarksList,
     searchSettings: SearchSettings,
+    notificationSettings: NotificationSettings,
     bookmarkSettings: BookmarkSettings,
     quasarLinks: QuasarLinks,
     settings: SettingsIndex,

@@ -12,11 +12,11 @@
       <q-icon name="keyboard_arrow_right"></q-icon>
     </q-item>
 
-    <!--<q-item class="setting bg-white row items-center q-mb-xs" clickable @click="openSetting('notifications')">
+    <q-item class="setting bg-white row items-center q-mb-xs" clickable @click="openSetting('notifications')">
       Notifications
       <q-space />
       <q-icon name="keyboard_arrow_right"></q-icon>
-    </q-item>-->
+    </q-item>
 
     <q-item class="setting bg-white row items-center q-mb-xs" clickable @click="openSetting('bookmarks')">
       Bookmarks

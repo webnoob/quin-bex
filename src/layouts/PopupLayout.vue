@@ -56,7 +56,7 @@
       <q-toolbar class="tabs">
         <q-tabs class="full-width" align="justify" :value="selectedTab" @input="tabChanged" dense>
           <q-tab name="search" icon="search" />
-          <q-tab name="notifications" icon="notifications" />
+          <q-tab name="notifications" icon="notifications" v-if="$store.getters.settings.quasarNotificationsEnabled" />
           <q-tab name="bookmarks" icon="bookmark" />
         </q-tabs>
       </q-toolbar>
@@ -100,7 +100,7 @@
     <q-page-container class="popup_container">
       <q-tab-panels v-model="selectedTab">
         <q-tab-panel name="search" class="q-pa-none"><search-results :data="searchResults" /></q-tab-panel>
-        <q-tab-panel name="notifications" class="q-pa-none">
+        <q-tab-panel name="notifications" class="q-pa-none" v-if="$store.getters.settings.quasarNotificationsEnabled">
           <q-scroll-area
             class="flex flex-center"
             style="height: 486px; width: 100%;"

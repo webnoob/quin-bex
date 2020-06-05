@@ -5,6 +5,7 @@ export interface SettingsStateInterface {
   groupBookmarksList: boolean;
   groupBookmarksTree: boolean;
   lastSearch: string;
+  quasarNotificationsEnabled: boolean;
 }
 
 const state: SettingsStateInterface = {
@@ -13,7 +14,8 @@ const state: SettingsStateInterface = {
   lastTab: 'search',
   groupBookmarksList: false,
   groupBookmarksTree: false,
-  lastSearch: ''
+  lastSearch: '',
+  quasarNotificationsEnabled: true
 }
 
 export default state
