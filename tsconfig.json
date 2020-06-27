@@ -3,6 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
-    "noImplicitAny": false,
+    "noImplicitAny": false
   }
 }

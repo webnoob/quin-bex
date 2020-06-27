@@ -13,9 +13,23 @@ export default class Notifications extends Vue {
     })
   }
 
-  public mounted () {
-    dbService.getAll('notification').then(notifications => {
-      this.notifications = notifications
+  public loadNotifications () {
+    dbService.getAll('notification').then((notifications: QuasarNotification[]) => {
+      this.notifications = notifications.sort((a, b) => b.timestamp - a.timestamp)
     })
+  }
+
+  public mounted () {
+    this.loadNotifications()
+  }
+
+  public created () {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    this.$q.bex.on('new.notification', this.loadNotifications)
+  }
+
+  public beforeDestroy () {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    this.$q.bex.off('new.notification', this.loadNotifications)
   }
 }

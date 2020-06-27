@@ -61,5 +61,5 @@ export type QuasarNotification = {
   message: string;
   link: string;
   postNotification: boolean;
-  date: string;
+  timestamp: number;
 }

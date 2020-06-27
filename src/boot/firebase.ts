@@ -1,5 +1,5 @@
 import { boot } from 'quasar/wrappers'
-import * as firebase from 'firebase'
+import * as FireBase from 'firebase'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCyMcYQ9js4JUkun2XJVO35zh7eOoaWNQs',
@@ -12,9 +12,12 @@ const firebaseConfig = {
   measurementId: 'G-CC6EP1582V'
 }
 
+const firebase = FireBase.initializeApp(firebaseConfig)
+const firebaseDb = firebase.firestore()
+
 export default boot(({ Vue }) => {
-  Vue.prototype.$firebase = firebase.initializeApp(firebaseConfig)
-  Vue.prototype.$firebaseDb = firebase.firestore()
+  Vue.prototype.$firebase = firebase
+  Vue.prototype.$firebaseDb = firebaseDb
 })
 
-export { firebaseConfig }
+export { firebaseConfig, firebase, firebaseDb }

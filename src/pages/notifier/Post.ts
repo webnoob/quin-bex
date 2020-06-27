@@ -13,11 +13,13 @@ const { formatDate } = date
 })
 export default class NotifierIndexPage extends Vue {
   public model!: QuasarNotification
+  public date = ''
 
   public resetModel () {
+    this.date = formatDate(new Date(), 'YYYY/MM/DD')
     this.model = {
       id: uuidv4(),
-      date: formatDate(new Date(), 'YYYY/MM/DD'),
+      timestamp: 0,
       title: '',
       link: '',
       message: '',
@@ -26,7 +28,12 @@ export default class NotifierIndexPage extends Vue {
   }
 
   public postNotification () {
-    this.$firebaseDb.collection('notifications').doc(this.model.id).set(this.model).then(() => {
+    const model = {
+      ...this.model,
+      timestamp: Math.round(new Date().getTime() / 1000) // new Date(this.date).getTime() / 1000
+    }
+
+    this.$firebaseDb.collection('notifications').doc(this.model.id).set(model).then(() => {
       this.$q.notify({
         message: 'Notification Posted',
         color: 'positive',

@@ -46,7 +46,6 @@ const remove = (key) => {
 }
 
 const add = (type, data) => {
-  console.log('adding', type, data)
   const id = data.id || uuidv4()
   const key = type + '.' + id
   const model = {

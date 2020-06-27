@@ -8,11 +8,11 @@
 
       <q-input v-model="model.link" label="Link" class="full-width" />
 
-      <q-input v-model="model.date" class="full-width">
+      <q-input v-model="date" class="full-width">
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
             <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-              <q-date v-model="model.date" @input="() => $refs.qDateProxy.hide()" />
+              <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" />
             </q-popup-proxy>
           </q-icon>
         </template>
