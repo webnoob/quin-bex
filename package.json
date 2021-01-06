@@ -14,7 +14,7 @@
   "dependencies": {
     "@quasar/app": "^1.9.1",
     "@quasar/extras": "^1.8.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "docsearch.js": "^2.6.3",
     "firebase": "^7.14.5",
     "quasar": "^1.12.0",
